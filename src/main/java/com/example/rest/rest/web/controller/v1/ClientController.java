@@ -1,6 +1,5 @@
 package com.example.rest.rest.web.controller.v1;
 
-import com.example.rest.rest.excepton.EntityNotFoundException;
 import com.example.rest.rest.mapper.v1.ClientMapper;
 import com.example.rest.rest.model.Client;
 import com.example.rest.rest.service.ClientService;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "Clint V1", description = "Client API version V1")
 public class ClientController {
-    private final ClientService clientService;
+    private final ClientService clientServiceImpl;
     private final ClientMapper clientMapper;
 
     @Operation(
@@ -36,11 +35,11 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<ClientListResponse> findAll() {
         return ResponseEntity.ok(
-                clientMapper.clientListToClientResponseList(clientService.findAll())
+                clientMapper.clientListToClientResponseList(clientServiceImpl.findAll())
         );
     }
 
-    @GetMapping("/{id}")
+
     @Operation(
             summary = "Get client by ID",
             description = "Get client by ID, Return id, name and list of orders",
@@ -60,9 +59,10 @@ public class ClientController {
                     }
             )
     })
+    @GetMapping("/{id}")
     public ResponseEntity<ClientResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(
-                clientMapper.clientToResponse(clientService.findById(id))
+                clientMapper.clientToResponse(clientServiceImpl.findById(id))
         );
     }
 
@@ -70,7 +70,7 @@ public class ClientController {
     public ResponseEntity<ClientResponse> create(@RequestBody @Valid UpsertClientRequest request) {
 //        Client newClient = clientService.save(clientMapper.requestToClient(request));
         Client newClient = clientMapper.requestToClient(request);
-        newClient = clientService.save(newClient);
+        newClient = clientServiceImpl.save(newClient);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(clientMapper.clientToResponse(newClient));
     }
@@ -78,7 +78,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<ClientResponse> update(@PathVariable("id") Long clientId,
                                                  @RequestBody UpsertClientRequest request) {
-        Client updatedClient = clientService.update(clientMapper.requestToClient(clientId, request));
+        Client updatedClient = clientServiceImpl.update(clientMapper.requestToClient(clientId, request));
         return ResponseEntity.ok(clientMapper.clientToResponse(updatedClient));
     }
 
@@ -89,7 +89,7 @@ public class ClientController {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        clientService.deleteById(id);
+        clientServiceImpl.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

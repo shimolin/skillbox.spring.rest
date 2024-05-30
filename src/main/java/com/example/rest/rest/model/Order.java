@@ -1,21 +1,37 @@
 package com.example.rest.rest.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Getter
+@Setter
+@ToString
+@Entity(name = "orders")
 public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String product;
-    private BigDecimal cost;
-    private Client client;
-    private Instant createTime;
-    private Instant updateAt;
 
+    private String product;
+
+    private BigDecimal cost;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    @ToString.Exclude
+    private Client client;
+
+    @CreationTimestamp
+    private Instant createTime;
+
+    @UpdateTimestamp
+    private Instant updateAt;
 }
