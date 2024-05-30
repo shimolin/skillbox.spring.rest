@@ -30,7 +30,7 @@ public class Order {
     private Client client;
 
     @CreationTimestamp
-    private Instant createTime;
+    private Instant createAt;
 
     @UpdateTimestamp
     private Instant updateAt;

@@ -5,7 +5,9 @@ import com.example.rest.rest.excepton.UpdateStateException;
 import com.example.rest.rest.model.Order;
 import com.example.rest.rest.repository.OrderRepository;
 import com.example.rest.rest.service.OrderService;
+import com.example.rest.rest.web.model.OrderFilter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -16,6 +18,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+    @Override
+    public List<Order> filterBy(OrderFilter filter) {
+        throw new NotImplementedException();
+    }
 
     private final OrderRepository orderRepository;
 

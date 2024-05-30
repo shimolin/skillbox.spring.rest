@@ -47,7 +47,7 @@ public class InMemoryOrderRepository implements OrderRepository {
         order.setClient(client);
         order.setId(orderId);
         Instant now = Instant.now();
-        order.setCreateTime(now);
+        order.setCreateAt(now);
         order.setUpdateAt(now);
         repository.put(orderId, order);
         client.addOrder(order);
