@@ -2,9 +2,12 @@ package com.example.rest.rest.service.impl;
 
 import com.example.rest.rest.excepton.EntityNotFoundException;
 import com.example.rest.rest.model.Client;
+import com.example.rest.rest.model.Order;
 import com.example.rest.rest.repository.DatabaseClientRepository;
+import com.example.rest.rest.repository.DatabaseOrderRepository;
 import com.example.rest.rest.service.ClientService;
 import com.example.rest.rest.utils.BeanUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,8 @@ import java.util.List;
 public class DatabaseClientService implements ClientService {
 
     private final DatabaseClientRepository clientRepository;
+    private final DatabaseOrderRepository orderRepository;
+
 
     @Override
     public List<Client> findAll() {
@@ -46,5 +51,17 @@ public class DatabaseClientService implements ClientService {
     public void deleteById(Long id) {
         clientRepository.deleteById(id);
 
+    }
+
+    @Override
+    @Transactional
+    public Client saveWithOrders(Client client, List<Order> orders) {
+        Client savedClient = clientRepository.save(client);
+        for(Order order: orders){
+            order.setClient(savedClient);
+            var savedOrder = orderRepository.save(order);
+            savedClient.addOrder(savedOrder);
+        }
+        return savedClient;
     }
 }
