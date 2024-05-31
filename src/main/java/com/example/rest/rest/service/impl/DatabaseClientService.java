@@ -1,5 +1,6 @@
 package com.example.rest.rest.service.impl;
 
+import com.example.rest.rest.aop.Loggable;
 import com.example.rest.rest.excepton.EntityNotFoundException;
 import com.example.rest.rest.model.Client;
 import com.example.rest.rest.model.Order;
@@ -23,6 +24,7 @@ public class DatabaseClientService implements ClientService {
 
 
     @Override
+    @Loggable
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
@@ -55,6 +57,7 @@ public class DatabaseClientService implements ClientService {
 
     @Override
     @Transactional
+    @Loggable
     public Client saveWithOrders(Client client, List<Order> orders) {
         Client savedClient = clientRepository.save(client);
         for(Order order: orders){
